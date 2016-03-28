@@ -1,29 +1,31 @@
 import org.junit.Test;
-import org.sxf.Base;
-import org.sxf.Children;
-import org.sxf.Modifier;
-import org.sxf.Target;
+import org.sxf.*;
 
-import static org.junit.Assert.*;
+import java.lang.reflect.InvocationTargetException;
 
 public class ModifierTest {
 
     @Test
-    public void testModifyClass() throws Exception {
+    public void testModifyClass() {
         System.out.println("Before");
-
-        Base b = new Base(); b.Work();
-        Target t = new Target(); t.Work();
-        Children c = new Children(); c.Work();
+        new App().run();
 
         Modifier m = new Modifier();
         m.ModifyClass("org.sxf.Target", "org.sxf.Target2");
 
-        System.out.println("After");
+        System.out.println("\nAfter\n");
+        Class c = m.loadClass("org.sxf.App");
 
-        Base b2 = new Base(); b2.Work();
-        Target t2 = new Target(); t2.Work();
-        Children c2 = new Children(); c2.Work();
+        Object app = null;
+        try {
+            app = c.newInstance();
+            c.getMethod("run").invoke(app);
+
+        } catch (InstantiationException | IllegalAccessException
+                | NoSuchMethodException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
